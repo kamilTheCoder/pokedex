@@ -1,20 +1,13 @@
 package api
 
+import "pokedex/pokemon"
+
 const (
 	Translator_Shakespeare = "shakespeare"
-	Translator_Yoda = "yoda"
+	Translator_Yoda        = "yoda"
 )
 
 type Api interface {
-	GetHabitat(pokemonName string) string
-	GetDescription(pokemonName string) string
-	GetLegendaryStatus(species string) bool
+	GetPokemon(name string) (pokemon.Pokemon, error)
 	GetTranslation(translator string, text string) string
-}
-
-type Pokemon struct {
-	Name string
-	Description string	// https://pokeapi.co/api/v2/characteristic/{id}/ descriptions
-	Habitat string		// https://pokeapi.co/api/v2/pokemon-habitat/{id or name}/
-	Legendary bool		// https://pokeapi.co/api/v2/pokemon-species/{id or name}/ is_legendary
 }
