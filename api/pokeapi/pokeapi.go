@@ -1,6 +1,7 @@
 package pokeapi
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -11,7 +12,9 @@ import (
 )
 
 const (
-	pokemonApiPath = "https://pokeapi.co/api/v2/pokemon-species/"
+	pokemonApiPath    = "https://pokeapi.co/api/v2/pokemon-species/"
+	translatorApiPath = "https://api.funtranslations.com/translate/"
+	useRealTranslator = false
 )
 
 type Api struct{}
@@ -40,6 +43,31 @@ func (a Api) GetPokemon(name string) (pokemon.PokemonRaw, error) {
 	return raw, nil
 }
 
-func (a Api) GetTranslation(translator string, text string) string {
-	return "[" + translator + "]" + text
+func (a Api) GetTranslation(translator string, text string) (string, error) {
+	if !useRealTranslator {
+		return "[" + translator + "]" + text, nil
+	}
+
+	var body = []byte(`{"title":"` + text + `"}`)
+	resp, err := http.Post(translatorApiPath+translator+"/", "text", bytes.NewBuffer(body))
+	if err != nil {
+		return "", fmt.Errorf("error fetching %v translation: %w", translator, err)
+	}
+
+	respData, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("error reading response for %v translation: %w", translator, err)
+	}
+
+	if strings.HasPrefix(string(respData), "Not Found") {
+		return "", fmt.Errorf("error fetching %v translation: %w", translator, err)
+	}
+
+	var raw pokemon.PokemonRaw
+	err = json.Unmarshal(respData, &raw)
+	if err != nil {
+		return "", fmt.Errorf("error unmarshalling response for %v translation: %w", translator, err)
+	}
+
+	return "", nil
 }
