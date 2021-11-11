@@ -35,6 +35,7 @@ As the API evolved, Postman tests have turned into an integration test set, cons
 Additionally, following pokemon were translated:
 - Existing, non-legendary, non-cave pokemon (charmander)
 - Existing, non-legendary, cave pokemon (diglett)
+- Existing, legendary, non-cave pokemon (zapdos)
 - Non-existing pokemon (digletttt)
 
 All of the tests above were repeated a few times, in order to test caching mechanism.
@@ -44,23 +45,26 @@ All of the tests above were repeated a few times, in order to test caching mecha
 Additionally, [gomock](https://github.com/golang/mock) was used for interface mocking.
 
 ### Rate limitation
-One of the APIs used, funtranslations.com, allows limited rate of usages for free: no more than 5 calls per hour or 60 calls per day. 
+One of the APIs used, funtranslations.com, allows limited rate of usages for free: no more than 5 calls per hour or 60 calls per day. With that in mind, error handling was made to gracefully handle errors from that API, as well as a caching system was put in place, to reduce number of potential requests (see below).
 
 ### Cache
 The `cache` package (`/cache`) is adopted from my earlier implementation https://github.com/kamilTheCoder/web-crawler/tree/master/crawler/cache, which in the current form is not flexible enough to re-use as a stand-alone import.
 
-In the current form caching saves all information from APIs. The scope of this project implies it will be no more than 898 entries, as there are only that many pokemon as of of Nov '21.
-Less than 1000 entries represent a very small memory footprint, even including cached fun translation of descriptions. Keeping them in memory might also help overcome translation API call limitation, since repeated requests would be served by cache and not retreived from the real, limited API.
+In the current form caching saves all information from APIs. The scope of this project implies it will be no more than 898 entries, as there are only that many pokemon as of Nov '21.
+Less than 1000 entries represent a very small memory footprint, even including cached fun translation of descriptions. Keeping them in memory might also help overcome translation API call limitation, since repeated requests would be served by cache and not retrieved from the real, limited API.
 
 ### Error handling
 For the most part, errors are not exposed to the API consumer, in order not to reveal too much about API implementation. Alternative route could have pre-defined errors which user could encounter.
 
 ## Potential improvements
 ### Config
-Some of the settings, such as port to listen on and URLs for thrid-party APIs could be extracted to a config file, for example using [Viper](https://github.com/spf13/viper), or a manually built solution.
+Some of the settings, such as port to listen on and URLs for third-party APIs could be extracted to a config file, for example using [Viper](https://github.com/spf13/viper), or a manually built solution.
 
 ### Fun translations API key
 Currently, the API only ever uses the free version of fun translations API. A potential feature could accommodate users who have API key for paid subscription, most likely through a config parameter. 
 
 ### Better errors and logging
 This implementation uses simple logging via console printing and free-text error messages. It could be improved by implementing actual logging and pre-defined errors, to better reflect a real-world system.
+
+### Add automated integration tests
+Using [Godog](https://github.com/cucumber/godog) implement gherkin tests to automate postman requests from section above.
