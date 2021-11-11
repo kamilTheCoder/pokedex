@@ -16,10 +16,13 @@ const (
 	translatorApiPath = "https://api.funtranslations.com/translate/"
 )
 
+// HttpClient is an interface that abstracts out standard http.Client
 type HttpClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
+// Api is the main structure to run API requests
+// The Client field enables injecting mocked version of the http.Client
 type Api struct {
 	Client HttpClient
 }

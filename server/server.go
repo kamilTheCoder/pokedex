@@ -13,7 +13,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-const serverPort = ":5000"
+const serverPort = ":8080"
 
 var pokeApi pokeapi.Api
 

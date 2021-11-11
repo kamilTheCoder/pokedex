@@ -5,6 +5,7 @@ const (
 	HabitatCave     = "cave"
 )
 
+// Pokemon represents data as it is stored within the pokedex
 type Pokemon struct {
 	Name                string            `json:"name"`
 	VariantDescriptions map[string]string `json:"-"`
@@ -13,6 +14,7 @@ type Pokemon struct {
 	Legendary           bool              `json:"isLegendary"`
 }
 
+// PokemonRaw represents data as it arrives from pokeAPI
 type PokemonRaw struct {
 	Name         string        `json:"name"`
 	FalvourTexts []FlavourText `json:"flavor_text_entries"`
@@ -20,6 +22,7 @@ type PokemonRaw struct {
 	Legendary    bool          `json:"is_legendary"`
 }
 
+// Contains pokemon description information and the language version of the description
 type FlavourText struct {
 	FalvourText string `json:"flavor_text"`
 	Language    struct {
@@ -27,10 +30,13 @@ type FlavourText struct {
 	} `json:"language"`
 }
 
+// Habitat contains information on where does a pokemon usually reside
 type Habitat struct {
 	Name string `json:"name"`
 }
 
+// ToPokemon converts raw representation of the pokemon data from pokeAPI
+// into internal representation, which is to be exposed via this pokedex API
 func (r PokemonRaw) ToPokemon() Pokemon {
 	p := Pokemon{
 		Name:                r.Name,
