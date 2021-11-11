@@ -21,15 +21,27 @@ See [gomock](https://github.com/golang/mock) for more information.
 ### Running
 To run the programme, execute `go run main.go`
 
+## Design decisions
 
-## Testing
+### Testing methodology
 Most testing during development was done using Postman and requests. This was deemed more useful in the experimental stages of the API, when it wasn't really clear what are we even expecting to get from the API.
+
+As the API evolved, Postman tests have turned into an integration test set, consisting of to get following pokemon:
+- Existing, non-legendary pokemon (charmander)
+- Existing, legendary pokemon (zapdos)
+- Non-existing pokemon (charmander2)
+- Poor pokemon without a habitat to its name :( (wormadam)
+
+Additionally, following pokemon were translated:
+- Existing, non-legendary, non-cave pokemon (charmander)
+- Existing, non-legendary, cave pokemon (diglett)
+- Non-existing pokemon (digletttt)
+
+All of the tests above were repeated a few times, in order to test caching mechanism.
 
 [Go Convey](https://github.com/smartystreets/goconvey) was used for unit tests, since it provides a variety of assertions and a `given-when-then` syntax support, making it better option than the default golang tests.
 
 Additionally, [gomock](https://github.com/golang/mock) was used for interface mocking.
-
-## Design decisions
 
 ### Rate limitation
 One of the APIs used, funtranslations.com, allows limited rate of usages for free: no more than 5 calls per hour or 60 calls per day. 
