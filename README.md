@@ -7,6 +7,17 @@ Requires at least version 1.16.3 of Golang to run. See https://golang.org/doc/in
 ### Build
 To build the Pokedex, run `go build ./...`
 
+#### Mock file generation
+To generate mock files install `mockgen`:
+
+`go install github.com/golang/mock/mockgen@v1.6.0`
+
+And then run:
+
+`mockgen -source=api/pokeapi/pokeapi.go -destination=mocks/pokeapi/mock_pokeapi.go`
+
+See [gomock](https://github.com/golang/mock) for more information.
+
 ### Running
 To run the programme, execute `go run main.go`
 
@@ -15,6 +26,8 @@ To run the programme, execute `go run main.go`
 Most testing during development was done using Postman and requests. This was deemed more useful in the experimental stages of the API, when it wasn't really clear what are we even expecting to get from the API.
 
 [Go Convey](https://github.com/smartystreets/goconvey) was used for unit tests, since it provides a variety of assertions and a `given-when-then` syntax support, making it better option than the default golang tests.
+
+Additionally, [gomock](https://github.com/golang/mock) was used for interface mocking.
 
 ## Design decisions
 

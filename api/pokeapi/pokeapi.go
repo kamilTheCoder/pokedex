@@ -59,7 +59,7 @@ func (a Api) GetPokemon(name string) (pokemon.PokemonRaw, error) {
 	}
 
 	if strings.HasPrefix(string(respData), "Not Found") {
-		return pokemon.PokemonRaw{}, fmt.Errorf("error fetching %v: %w", name, errors.New("not found"))
+		return pokemon.PokemonRaw{}, fmt.Errorf("error fetching %v: %w", name, errors.New("pokemon not found"))
 	}
 
 	var raw pokemon.PokemonRaw
