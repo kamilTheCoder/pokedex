@@ -2,13 +2,15 @@ package pokemon
 
 const (
 	languageEnglish = "en"
+	HabitatCave     = "cave"
 )
 
 type Pokemon struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Habitat     string `json:"habitat"`
-	Legendary   bool   `json:"isLegendary"`
+	Name                string            `json:"name"`
+	VariantDescriptions map[string]string `json:"-"`
+	Description         string            `json:"description"`
+	Habitat             string            `json:"habitat"`
+	Legendary           bool              `json:"isLegendary"`
 }
 
 type PokemonRaw struct {
@@ -31,9 +33,10 @@ type Habitat struct {
 
 func (r PokemonRaw) ToPokemon() Pokemon {
 	p := Pokemon{
-		Name:      r.Name,
-		Habitat:   r.Habitat.Name,
-		Legendary: r.Legendary,
+		Name:                r.Name,
+		Habitat:             r.Habitat.Name,
+		Legendary:           r.Legendary,
+		VariantDescriptions: map[string]string{},
 	}
 
 	for _, t := range r.FalvourTexts {
