@@ -61,3 +61,8 @@ func (c *cache) Update(pokemon pokemon.Pokemon) {
 	c.pokeCache[pokemon.Name] = pokemon
 	c.mutex.Unlock()
 }
+
+// Size returns total number of entries stored in the cache
+func (c *cache) Size() int {
+	return len(c.pokeCache)
+}

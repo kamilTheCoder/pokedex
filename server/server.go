@@ -13,6 +13,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+const serverPort = ":8080"
+
 var pokeApi pokeapi.Api
 
 type ApiError struct {
@@ -27,9 +29,9 @@ func HandleRequests() {
 	router.HandleFunc("/{name}", handlePokemon)
 	router.HandleFunc("/translated/{name}", handleTranslated)
 
-	fmt.Println("serving")
+	log.Fatal(http.ListenAndServe(serverPort, router))
+	fmt.Println("serving on port " + serverPort)
 
-	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
 func handlePokemon(w http.ResponseWriter, r *http.Request) {
