@@ -14,7 +14,6 @@ import (
 const (
 	pokemonApiPath    = "https://pokeapi.co/api/v2/pokemon-species/"
 	translatorApiPath = "https://api.funtranslations.com/translate/"
-	useRealTranslator = true
 )
 
 type Api struct{}
@@ -63,10 +62,6 @@ func (a Api) GetPokemon(name string) (pokemon.PokemonRaw, error) {
 // GetTranslation makes a request for translation from a third-party funtranslations.com API
 // If succesful, returns translated string. Otherwise, returns an empty string and an error
 func (a Api) GetTranslation(translator string, text string) (string, error) {
-	if !useRealTranslator {
-		return "[" + translator + "]" + text, nil
-	}
-
 	body, err := json.Marshal(TranslatorRequest{text})
 	if err != nil {
 		return "", fmt.Errorf("error masharlling %v translation: %w", translator, err)
