@@ -54,3 +54,10 @@ func (c *cache) Wipe() {
 	c.mutex = &sync.Mutex{}
 	c.rejcetMutex = &sync.Mutex{}
 }
+
+// Update allows amending information on an existing pokemon in the cache. Adds a new one, if there wasn't one already there
+func (c *cache) Update(pokemon pokemon.Pokemon) {
+	c.mutex.Lock()
+	c.pokeCache[pokemon.Name] = pokemon
+	c.mutex.Unlock()
+}
