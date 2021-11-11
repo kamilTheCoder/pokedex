@@ -23,7 +23,7 @@ type ApiError struct {
 
 // HandleRequests serves as the main API request handler, setting up routes and starting up the server
 func HandleRequests() {
-	pokeApi = pokeapi.Api{}
+	pokeApi = pokeapi.Api{Client: &http.Client{}}
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/{name}", handlePokemon)

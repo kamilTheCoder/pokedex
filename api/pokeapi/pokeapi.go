@@ -16,7 +16,13 @@ const (
 	translatorApiPath = "https://api.funtranslations.com/translate/"
 )
 
-type Api struct{}
+type HttpClient interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
+type Api struct {
+	Client HttpClient
+}
 
 // TranslatorRequest is a base struct for fun translations API request
 type TranslatorRequest struct {
@@ -36,7 +42,13 @@ type TranslatorResponse struct {
 // GetPokemon makes request to pokeapi.co trying to get information on a pokemon
 // If successful, returns a normalised pokemon struct
 func (a Api) GetPokemon(name string) (pokemon.PokemonRaw, error) {
-	resp, err := http.Get(pokemonApiPath + name + "/")
+
+	req, err := http.NewRequest(http.MethodGet, pokemonApiPath+name+"/", nil)
+	if err != nil {
+		return pokemon.PokemonRaw{}, fmt.Errorf("error preparing request for %v: %w", name, err)
+	}
+
+	resp, err := a.Client.Do(req)
 	if err != nil {
 		return pokemon.PokemonRaw{}, fmt.Errorf("error fetching %v: %w", name, err)
 	}
@@ -68,7 +80,14 @@ func (a Api) GetTranslation(translator string, text string) (string, error) {
 	}
 
 	url := translatorApiPath + translator + ".json"
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(body))
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(body))
+	if err != nil {
+		return "", fmt.Errorf("error preparing request for %v: %w", translator, err)
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+
+	resp, err := a.Client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("error fetching %v translation: %w", translator, err)
 	}
