@@ -109,11 +109,3 @@ func (a Api) GetTranslation(translator string, text string) (string, error) {
 
 	return translation.Contents.Translated, nil
 }
-
-// Example of an erro message from the translation API after reaching the hourly rate limit
-// {
-//     "error": {
-//         "code": 429,
-//         "message": "Too Many Requests: Rate limit of 5 requests per hour exceeded. Please wait for 57 minutes and 23 seconds."
-//     }
-// }
