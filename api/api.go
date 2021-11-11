@@ -3,8 +3,8 @@ package api
 import "pokedex/pokemon"
 
 const (
-	Translator_Shakespeare = "shakespeare"
-	Translator_Yoda        = "yoda"
+	TranslatorShakespeare = "shakespeare"
+	TranslatorYoda        = "yoda"
 )
 
 type Api interface {
