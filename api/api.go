@@ -8,6 +8,6 @@ const (
 )
 
 type Api interface {
-	GetPokemon(name string) (pokemon.Pokemon, error)
+	GetPokemon(name string) (pokemon.PokemonRaw, error)
 	GetTranslation(translator string, text string) (string, error)
 }

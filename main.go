@@ -1,7 +1,12 @@
 package main
 
-import "pokedex/server"
+import (
+	"net/http"
+	"pokedex/api/pokeapi"
+	"pokedex/server"
+)
 
 func main() {
-	server.HandleRequests()
+	api := pokeapi.Api{Client: &http.Client{}}
+	server.HandleRequests(api)
 }

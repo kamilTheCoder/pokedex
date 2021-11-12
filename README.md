@@ -21,6 +21,10 @@ See [gomock](https://github.com/golang/mock) for more information.
 ### Running
 To run the programme, execute `go run main.go`
 
+After that you can make requests to on `http://localhost:5000` to following APIs:
+* `/{pokemon name}`
+* `/translated/{pokemon name}`
+
 ## Design decisions
 
 ### Testing methodology

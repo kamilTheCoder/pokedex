@@ -6,24 +6,24 @@ import (
 	"log"
 	"net/http"
 	"pokedex/api"
-	"pokedex/api/pokeapi"
 	"pokedex/cache"
 	poke "pokedex/pokemon"
 
 	"github.com/gorilla/mux"
 )
 
-const serverPort = ":8080"
+const serverPort = ":5000"
 
-var pokeApi pokeapi.Api
+var pokeApi api.Api
 
 type ApiError struct {
 	Error string `json:"error"`
 }
 
 // HandleRequests serves as the main API request handler, setting up routes and starting up the server
-func HandleRequests() {
-	pokeApi = pokeapi.Api{Client: &http.Client{}}
+func HandleRequests(api api.Api) {
+	// pokeApi = pokeapi.Api{Client: &http.Client{}}
+	pokeApi = api
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/{name}", handlePokemon)
@@ -48,6 +48,7 @@ func handlePokemon(w http.ResponseWriter, r *http.Request) {
 	p, err := createNewPokemon(pokeName)
 	if err != nil {
 		fmt.Println(err.Error())
+		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(ApiError{"error fetching pokemon information for " + pokeName})
 		return
 	}
@@ -68,6 +69,7 @@ func handleTranslated(w http.ResponseWriter, r *http.Request) {
 		p, err = createNewPokemon(pokeName)
 		if err != nil {
 			fmt.Println(err.Error())
+			w.WriteHeader(http.StatusNotFound)
 			json.NewEncoder(w).Encode(ApiError{"error fetching pokemon information for " + pokeName})
 			return
 		}
